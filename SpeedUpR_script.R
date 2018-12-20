@@ -46,7 +46,7 @@ df
 # count per gene-pair the number of co-occurences
 df.count<-GetCO_0(df)
 df.count
-df.orig<-df.count
+
 
 #------------------------------------------------
 # Timing
@@ -148,7 +148,7 @@ system.time({
 # test if df.count=df.orig
 identical(df.count,df.orig)
 
-
+# >>> back to presentation!
 #------------------------------------------------
 # use matrix manipulation
 #------------------------------------------------
@@ -189,7 +189,7 @@ nc.lims<-res$nc.lims
 
 
 
-
+# >>> back to presentation!
 #=================================================
 # Ex 2: Which rows have sum > 4 ?
 # Examples taken from: 
@@ -224,7 +224,7 @@ output
 #------------------------------------------------
 
 # create big data frame
-df<-CreateBigDF(n=1e4)
+df<-CreateBigDF(n=2e4) # is 1e4 in original script
 dim(df)
 system.time({
   output<-Row4_naive(df)
@@ -345,10 +345,10 @@ system.time({
   })
 })
 identical(output,output.orig)
+output.orig<-output
 
 # create bigger data frame
-df<-CreateBigDF(n=1e7)
-
+df<-CreateBigDF(n=1e6) # was 1e7!  
 
 #------------------------------------------------
 # use Vectorize
@@ -399,9 +399,9 @@ library(Rcpp)
 sourceCpp("SpeedUpR.cpp")
 system.time({output <- cppCheckFour(df)})
 identical(output,output.orig)
-
-
-
+# old version of CpeedUpR.cpp gave FALSE,
+# because of "smaller_or_equal" instead of
+# "less_or_equal"
 
 #------------------------------------------------
 # benchmarking
@@ -423,11 +423,11 @@ vbenchmark<-c(1e3,5e3,1e4)
 txt<-"test"
 #txt<-"R33_windows"
 #txt<-"R34_mac"
-res<-BenchMark_Row4(vbenchmark, funcs, times=3, 
-                  maxsec=10, run=F, plot=T, 
+res<-BenchMark_Row4(vbenchmark, funcs, times=1, 
+                  maxsec=10, run=T, plot=T, 
                   txt=txt)
 
-
+# Back to presentation!!
 #=================================================
 # Ex 3: How to avoid aggregate
 #=================================================

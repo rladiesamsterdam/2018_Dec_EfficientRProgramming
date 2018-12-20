@@ -170,7 +170,7 @@ GetCO_3_mtx <- function(x){
   # set the lower triangle of the matrix 
   # and diagonal to NA
   mtx.tmp[lower.tri(mtx.tmp, diag = TRUE)] <- NA 
-  # melt the matrix
+  # melt the matrix (from reshape2 package)
   df.CO <- melt(mtx.tmp, na.rm = TRUE)
   colnames(df.CO) <- c("g1", "g2", "co")
   
@@ -469,6 +469,7 @@ manualcolors<-c('black', 'red2', 'orange',
 BenchMark_Row4 <- function(vbenchmark, funcs, times=1, 
                            maxsec=50, run=T, plot=T,
                            txt=""){
+
   library(microbenchmark)
   library(Rcpp)
   sourceCpp("SpeedUpR.cpp")
@@ -552,26 +553,25 @@ BenchMark_Row4 <- function(vbenchmark, funcs, times=1,
               nr.lims=nr.lims))
 }
 
-#=======================================================================
-# Function: FastAggr_1col(df, col, fcols, funcs, 
-#                         ncols, myfunc)
+#=====================================================
+# Function: FastAggr_1col(df, col, fcols, funcs, ncol)
 # Calculates fast aggregate on one column and returns 
-# result matrix
+# result dataframe 
 # - df: dataframe
 # - col: column name to aggregate on
 # - fcol: column names to apply function on
 # - func: functions to apply (same length as fcol)
-# - ncols: vector of names of new columns
-# - myfunc: ref to self defined function
-#=======================================================================
-FastAggr_1col<-function(df,col,fcol,func,ncol,myfunc) {
+# - ncol: vector of names of new columns
+#=====================================================
+FastAggr_1col<-function(df,col,fcol,func,ncol) {
   result <- lapply(split(seq(nrow(df)), df[[col]]), 
             function(.d)
             {
               c(
                 df[[col]][.d][1], 
-                sapply(1:length(fcol),FUN=function(x){
-                  do.call(func[x],list(df[[fcol[x]]][.d]))
+                sapply(1:length(fcol), FUN=function(x){
+                  do.call(func[x],
+                          list(df[[fcol[x]]][.d]))
                 })
               )
             })

@@ -13,7 +13,7 @@ CharacterVector cppCheckFour(DataFrame x) {
   if ((col1[i] + col2[i] + col3[i] + col4[i]) > 4) {
     out[i] = "greater";
   } else {
-    out[i] = "smaller_or_equal";
+    out[i] = "less_or_equal";
   }
 }
 return out;
